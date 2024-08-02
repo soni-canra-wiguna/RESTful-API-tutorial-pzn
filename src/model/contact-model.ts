@@ -1,0 +1,22 @@
+import { Contact } from "@prisma/client"
+
+export type ContactResponse = {
+  id: number
+  first_name: string
+  last_name?: string | null
+  email?: string | null
+  phone?: string | null
+}
+
+// omit menghapus property yang kita tambahkan, disini aku remove property id
+export type CreateContactRequest = Omit<ContactResponse, "id">
+
+export function toContactResponse(contact: Contact): ContactResponse {
+  return {
+    id: contact.id,
+    first_name: contact.first_name,
+    last_name: contact.last_name,
+    email: contact.email,
+    phone: contact.phone,
+  }
+}
