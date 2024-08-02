@@ -10,6 +10,7 @@ export type ContactResponse = {
 
 // omit menghapus property yang kita tambahkan, disini aku remove property id
 export type CreateContactRequest = Omit<ContactResponse, "id">
+export type UpdateContactRequest = ContactResponse
 
 export function toContactResponse(contact: Contact): ContactResponse {
   return {
