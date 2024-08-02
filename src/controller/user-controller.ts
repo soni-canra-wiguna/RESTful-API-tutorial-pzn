@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { CreateUserRequest, LoginUserRequest } from "../model/user-model"
 import { UserService } from "../service/user-service"
+import { UserRequest } from "../type/user-request"
 
 export class UserController {
   static async register(req: Request, res: Response, next: NextFunction) {
@@ -23,7 +24,18 @@ export class UserController {
         data: response,
       })
     } catch (error) {
-      next(error) // di pass ke next errornya agar bisa di tangkap errornya do middleware
+      next(error)
+    }
+  }
+
+  static async get(req: UserRequest, res: Response, next: NextFunction) {
+    try {
+      const response = await UserService.get(req.user!)
+      res.status(200).json({
+        data: response,
+      })
+    } catch (error) {
+      next(error)
     }
   }
 }
