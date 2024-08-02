@@ -1,4 +1,5 @@
 import { Contact } from "@prisma/client"
+import { string } from "zod"
 
 export type ContactResponse = {
   id: number
@@ -10,7 +11,16 @@ export type ContactResponse = {
 
 // omit menghapus property yang kita tambahkan, disini aku remove property id
 export type CreateContactRequest = Omit<ContactResponse, "id">
+
 export type UpdateContactRequest = ContactResponse
+
+export type SearchContactRequest = {
+  name?: string
+  phone?: string
+  email?: string
+  page: number
+  size: number
+}
 
 export function toContactResponse(contact: Contact): ContactResponse {
   return {
