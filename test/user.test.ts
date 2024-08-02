@@ -2,6 +2,7 @@ import supertest from "supertest"
 import { web } from "./../src/application/web"
 import { logger } from "../src/application/logger"
 import { UserTest } from "./test-util"
+import bcrypt from "bcrypt"
 
 describe("POST /api/users", () => {
   afterEach(async () => {
@@ -106,5 +107,71 @@ describe("GET /api/users/current", () => {
 
     expect(response.status).toBe(401)
     expect(response.body.errors).toBeDefined()
+  })
+})
+
+describe("PATCH /api/users/current", () => {
+  beforeEach(async () => {
+    await UserTest.create()
+  })
+
+  afterEach(async () => {
+    await UserTest.delete()
+  })
+
+  it("should reject update user if request is invalid", async () => {
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("X-API-TOKEN", "test")
+      .send({
+        name: "",
+        password: "",
+      })
+    logger.debug(response.body)
+
+    expect(response.status).toBe(400)
+    expect(response.body.errors).toBeDefined()
+  })
+
+  it("should reject update user if token is invalid", async () => {
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("X-API-TOKEN", "wrong-token")
+      .send({
+        name: "corrent",
+        password: "corrent",
+      })
+    logger.debug(response.body)
+
+    expect(response.status).toBe(401)
+    expect(response.body.errors).toBeDefined()
+  })
+
+  it("should be able to update username", async () => {
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("X-API-TOKEN", "test")
+      .send({
+        name: "updated name",
+      })
+    logger.debug(response.body)
+
+    expect(response.status).toBe(200)
+    expect(response.body.data.name).toBe("updated name")
+  })
+
+  it("should be able to update password", async () => {
+    const response = await supertest(web)
+      .patch("/api/users/current")
+      .set("X-API-TOKEN", "test")
+      .send({
+        password: "updated password",
+      })
+    logger.debug(response.body)
+
+    expect(response.status).toBe(200)
+
+    const user = await UserTest.get()
+    expect(await bcrypt.compare("updated password", user.password)).toBe(true)
   })
 })

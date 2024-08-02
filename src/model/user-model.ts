@@ -12,10 +12,12 @@ export type CreateUserRequest = {
   password: string
 }
 
-export type LoginUserRequest = {
-  username: string
-  password: string
-}
+export type LoginUserRequest = Pick<CreateUserRequest, "password" | "username">
+
+export type UpdateUserRequest = Pick<
+  Partial<CreateUserRequest>,
+  "name" | "password"
+>
 
 export function toUserResponse(user: User): UserResponse {
   return {

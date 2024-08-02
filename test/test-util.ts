@@ -1,3 +1,4 @@
+import { User } from "@prisma/client"
 import { prisma } from "../src/application/database"
 import bcrypt from "bcrypt"
 
@@ -20,5 +21,19 @@ export class UserTest {
         token: "test",
       },
     })
+  }
+
+  static async get(): Promise<User> {
+    const user = await prisma.user.findUnique({
+      where: {
+        username: "test",
+      },
+    })
+
+    if (!user) {
+      throw new Error("user is not found")
+    }
+
+    return user
   }
 }
