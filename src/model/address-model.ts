@@ -27,6 +27,10 @@ export type GetAddressRequest = {
   id: number
 }
 
+export interface UpdateAddressRequest extends CreateAddressRequest {
+  id: number
+}
+
 export function toAddressResponse(address: Address): AddressResponse {
   return {
     id: address.id,
