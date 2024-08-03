@@ -1,4 +1,4 @@
-import { Address, User } from "@prisma/client"
+import { Address } from "@prisma/client"
 
 export type AddressResponse = {
   id: number
@@ -9,18 +9,18 @@ export type AddressResponse = {
   postal_code: string
 }
 
-// export type CreateAddressRequest = Omit<AddressResponse, "id"> & {
-//   contact_id: number
-// }
-
-export type CreateAddressRequest = {
+export type CreateAddressRequest = Omit<AddressResponse, "id"> & {
   contact_id: number
-  street?: string
-  city?: string
-  province?: string
-  country: string
-  postal_code: string
 }
+
+// export type CreateAddressRequest = {
+//   contact_id: number
+//   street?: string
+//   city?: string
+//   province?: string
+//   country: string
+//   postal_code: string
+// }
 
 export type GetAddressRequest = {
   contact_id: number
@@ -30,6 +30,8 @@ export type GetAddressRequest = {
 export interface UpdateAddressRequest extends CreateAddressRequest {
   id: number
 }
+
+export type RemoveAddressRequest = GetAddressRequest
 
 export function toAddressResponse(address: Address): AddressResponse {
   return {
