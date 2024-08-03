@@ -28,6 +28,10 @@ apiRouter.get(
   "/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)",
   AddressController.get
 )
+apiRouter.get(
+  "/api/contacts/:contactId(\\d+)/addresses",
+  AddressController.list
+)
 apiRouter.put(
   "/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)",
   AddressController.update
